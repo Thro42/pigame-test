@@ -1,0 +1,10 @@
+bg = (255, 255, 255)
+red = (255, 0, 0)
+# Define some colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GRAY = (159, 163, 168)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+TEXT_COLOR = (250, 105, 10)
