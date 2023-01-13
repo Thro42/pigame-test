@@ -40,5 +40,4 @@ class Player:
     def fire(self):
         pos = pygame.math.Vector2(self.posistion.x, self.posistion.y)
         pos.y = pos.y - self.size.y/2
-        bullet = Bullet.Bullet(self.game, pos)
-        self.game.AddBullet(bullet)
+        self.game.FireBullet(pos)

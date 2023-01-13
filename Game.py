@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 import pygame.math
+import sys
 from Config import *
 
 import Player
@@ -14,6 +15,7 @@ class Game:
 
     def __init__(self, breite: int, hoehe: int):
         self.game_over = False
+        self.youWin = False 
         self.player = None
         size = (breite, hoehe)
         self.fenster = pygame.display.set_mode(size, pygame.RESIZABLE)
@@ -39,6 +41,13 @@ class Game:
         # einen Kugel merken
         self.bullets.append(bullet)
 
+    def FireBullet(self, pos: pygame.math.Vector2):
+        if len(self.bullets) <= 6:
+            # Kugel Instanzieren
+            bullet = Bullet.Bullet(self, pos)
+            # die Kugel merken
+            self.bullets.append(bullet)
+
     def KillBullet(self, bullet: Bullet):
         # Kugel beseitigen
         self.bullets.remove(bullet)
@@ -63,6 +72,8 @@ class Game:
             if event.type == pygame.QUIT:
                 self.game_over = True
             if event.type == pygame.KEYDOWN:  # Taste wurde gedrückt
+                if event.key == pygame.K_q:
+                    self.game_over = True
                 if event.key == pygame.K_RIGHT:
                     self.player.dx = 4
                 elif event.key == pygame.K_LEFT:
@@ -74,6 +85,17 @@ class Game:
                     self.player.dx = 0
                 elif event.key == pygame.K_RIGHT:
                     self.player.dx = 0
+
+    def showEnd(self):
+        self.gameover = pygame.image.load("game_over.png")
+        self.gameover = pygame.transform.scale(self.gameover, (self.fenster.get_width(), self.fenster.get_height()))
+        self.youwinImg = pygame.image.load("youwin.png")
+        self.youwinImg = pygame.transform.scale(self.youwinImg, (self.fenster.get_width(), self.fenster.get_height()))
+        imgrec = pygame.Rect(0, 0, self.fenster.get_width(), self.fenster.get_height())
+        if self.youWin:
+            self.fenster.blit(self.youwinImg, imgrec)
+        else:
+            self.fenster.blit(self.gameover, imgrec)
 
     def loop(self):
         # -------- Main Program Loop -----------
@@ -89,7 +111,21 @@ class Game:
             for enemy in self.enemys:
                 enemy.loop()
             if len(self.enemys) <= 0:
+                self.youWin = True
                 self.game_over = True
             pygame.display.update()
             self.clock.tick(60)
-        # self.fenster.
+        # Ende Zeigen
+        while True:
+            self.fenster.fill(GRAY)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:  # Taste wurde gedrückt
+                    if event.key == pygame.K_q:
+                        sys.exit()
+            self.showEnd()
+            pygame.display.update()
+            self.clock.tick(60)
+            
+
