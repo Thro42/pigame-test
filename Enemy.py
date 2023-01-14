@@ -13,17 +13,19 @@ class Enemy:
         self.has_hit = False
         self.position = pygame.math.Vector2(pos.x, pos.y)
         self.size = pygame.math.Vector2(40, 40)
-        self.image = pygame.image.load("alien-ship.png")
-        self.esplow = pygame.image.load("explo.png")
+        self.image = pygame.image.load("images/alien-ship.png")
+        self.esplow = pygame.image.load("images/explo.png")
         self.image = pygame.transform.scale(self.image, self.size)
         self.speed = -3
         self.rec = pygame.Rect(pos.x - (self.size.x /2), pos.y - (self.size.y /2 ) , self.size.x, self.size.y)
+        self.sound = pygame.mixer.Sound("sound/Explosion5.wav")
 
     def Hit(self, bullet: Bullet):
         # Feind ist getroffen
         self.size = pygame.math.Vector2(40, 40)
         self.has_hit = True
         self.image = pygame.transform.scale(self.esplow, self.size)
+        self.sound.play()
 
     def explore_loop(self):
         # Schleife für Explosion

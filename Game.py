@@ -31,7 +31,7 @@ class Game:
         p_pos = pygame.math.Vector2(400, 580)
         p_size = pygame.math.Vector2(40, 40)
         
-        self.player = Player.Player(self, "space-ship.png", p_pos, p_size)
+        self.player = Player.Player(self, "images/space-ship.png", p_pos, p_size)
         self.player.enableCenter(True)
 
     def SetPlayer(self, player: Player):
@@ -47,6 +47,7 @@ class Game:
             bullet = Bullet.Bullet(self, pos)
             # die Kugel merken
             self.bullets.append(bullet)
+            bullet.PlaySound()
 
     def KillBullet(self, bullet: Bullet):
         # Kugel beseitigen
@@ -58,13 +59,15 @@ class Game:
 
     def CheckHit(self, bullet: Bullet):
         # Prüfen üb die Kugel einen Treffer hat
-        bpos = bullet.position
+#        bpos = bullet.position
         for enemy in self.enemys:
-            epos = enemy.position
-            if ((bpos.y <= (epos.y + enemy.size.y/2)            # ist die Kugel schon über dem Feind
-                 and ((bpos.x > (epos.x - enemy.size.x/2))      # Kugel links im Feind
-                 and (bpos.x < (epos.x + enemy.size.x/2))))):   # Kugel rechts im Feind
+#            epos = enemy.position
+            if bullet.rec.colliderect(enemy.rec):
                 enemy.Hit(bullet)
+#            if ((bpos.y <= (epos.y + enemy.size.y/2)            # ist die Kugel schon über dem Feind
+#                 and ((bpos.x > (epos.x - enemy.size.x/2))      # Kugel links im Feind
+#                 and (bpos.x < (epos.x + enemy.size.x/2))))):   # Kugel rechts im Feind
+#                enemy.Hit(bullet)
 
     def HandleKeybord(self):
         # Tastatur befele verarbeiten
@@ -87,9 +90,9 @@ class Game:
                     self.player.dx = 0
 
     def showEnd(self):
-        self.gameover = pygame.image.load("game_over.png")
+        self.gameover = pygame.image.load("images/game_over.png")
         self.gameover = pygame.transform.scale(self.gameover, (self.fenster.get_width(), self.fenster.get_height()))
-        self.youwinImg = pygame.image.load("youwin.png")
+        self.youwinImg = pygame.image.load("images/youwin.png")
         self.youwinImg = pygame.transform.scale(self.youwinImg, (self.fenster.get_width(), self.fenster.get_height()))
         imgrec = pygame.Rect(0, 0, self.fenster.get_width(), self.fenster.get_height())
         if self.youWin:
@@ -115,6 +118,11 @@ class Game:
                 self.game_over = True
             pygame.display.update()
             self.clock.tick(60)
+        if self.youWin:
+            self.sound = pygame.mixer.Sound("sound/sieg_sound.wav")
+        else:
+            self.sound = pygame.mixer.Sound("sound/fail_sound.wav")
+        self.sound.play()
         # Ende Zeigen
         while True:
             self.fenster.fill(GRAY)

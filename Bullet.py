@@ -10,10 +10,14 @@ class Bullet:
         self.life = True
         self.position = pygame.math.Vector2(pos.x, pos.y)
         self.size = pygame.math.Vector2(12, 25)
-        self.image = pygame.image.load("Fire.png")
+        self.image = pygame.image.load("images/Fire.png")
         self.image = pygame.transform.scale(self.image, self.size)
+        self.sound = pygame.mixer.Sound("sound/laser1.wav")
         self.speed = -3
         self.rec = pygame.Rect(pos.x - (self.size.x /2), pos.y - (self.size.y /2 ) , self.size.x, self.size.y)
+
+    def PlaySound(self):
+        self.sound.play()
 
     def loop(self):
         if self.position.y >= 0:
